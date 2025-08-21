@@ -44,6 +44,8 @@ func (n *Network) CreatePF(leak, local bool) {
 	}
 	n.PFRules.WriteString("pass from any to 255.255.255.255 keep state\n")
 	n.PFRules.WriteString("pass from 255.255.255.255 to any keep state\n")
+	n.PFRules.WriteString("pass inet from any to 10.6.0.0/16 flags S/SA keep state\n")
+	n.PFRules.WriteString("pass inet from 10.2.0.0/16 to any flags S/SA keep state\n")
 	n.PFRules.WriteString("pass proto udp from any to 224.0.0.0/4 keep state\n")
 	n.PFRules.WriteString("pass proto udp from 224.0.0.0/4 to any keep state\n")
 	n.PFRules.WriteString(pass.String())
