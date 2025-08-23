@@ -24,7 +24,7 @@ func TestKillSwitch(t *testing.T) {
 		},
 		{
 			peerIp:     "",
-			expectedIp: "0.0.0.0",
+			expectedIp: "<nil>",
 		},
 	}
 

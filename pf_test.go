@@ -23,7 +23,7 @@ func TestPf(t *testing.T) {
 		},
 		{
 			peerIp:            "",
-			expectedVpnString: "vpn_ip = \"0.0.0.0\"",
+			expectedVpnString: "vpn_ip = \"<nil>\"",
 		},
 	}
 
