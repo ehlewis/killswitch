@@ -36,6 +36,7 @@ func main() {
 		e     = flag.Bool("e", false, "`Enable` load the pf rules")
 		p     = flag.Bool("p", false, "`Print` the pf rules")
 		v     = flag.Bool("v", false, fmt.Sprintf("Print version: %s", version))
+		t     = flag.Bool("t", false, "Create pf rules for VPN tunnels")
 		leak  = flag.Bool("leak", false, "Allow ICMP (ping) and DNS requests outside VPN")
 		local = flag.Bool("local", false, "Allow local network traffic")
 	)
@@ -117,7 +118,7 @@ func main() {
 		}
 	}
 
-	ks.CreatePF(*leak, *local)
+	ks.CreatePF(*leak, *local, *t)
 
 	if !*e {
 		fmt.Printf("\n%s: %s\n", "To enable the kill switch run", killswitch.Green("sudo killswitch -e"))

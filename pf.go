@@ -8,7 +8,7 @@ import (
 )
 
 // CreatePF creates a pf.conf
-func (n *Network) CreatePF(leak, local bool) {
+func (n *Network) CreatePF(leak, local bool, tun bool) {
 	var pass bytes.Buffer
 	n.PFRules.WriteString(fmt.Sprintf("# %s\n", strings.Repeat("-", 62)))
 	n.PFRules.WriteString(fmt.Sprintf("# %s\n", time.Now().Format(time.RFC1123Z)))
@@ -44,8 +44,14 @@ func (n *Network) CreatePF(leak, local bool) {
 	}
 	n.PFRules.WriteString("pass from any to 255.255.255.255 keep state\n")
 	n.PFRules.WriteString("pass from 255.255.255.255 to any keep state\n")
-	n.PFRules.WriteString("pass inet from any to 10.6.0.0/16 flags S/SA keep state\n")
-	n.PFRules.WriteString("pass inet from 10.6.0.0/16 to any flags S/SA keep state\n")
+	if tun {
+		for k, v := range n.P2PInterfaces {
+			if strings.Contains(k, "utun") {
+				n.PFRules.WriteString(fmt.Sprintf("pass inet from any to %s flags S/SA keep state\n", v[1]))
+				n.PFRules.WriteString(fmt.Sprintf("pass inet from %s to any flags S/SA keep state\n", v[1]))
+			}
+		}
+	}
 	n.PFRules.WriteString("pass proto udp from any to 224.0.0.0/4 keep state\n")
 	n.PFRules.WriteString("pass proto udp from 224.0.0.0/4 to any keep state\n")
 	n.PFRules.WriteString(pass.String())
