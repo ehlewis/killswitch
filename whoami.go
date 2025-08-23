@@ -2,7 +2,7 @@ package killswitch
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -27,7 +27,7 @@ func WhoamiDNS() (string, error) {
 	}
 
 	if len(r.Answer) == 0 {
-		return "", fmt.Errorf("could not found public IP")
+		return "", fmt.Errorf("could not find public IP")
 	}
 
 	for _, ans := range r.Answer {
@@ -54,6 +54,6 @@ func WhoamiWWW() (string, error) {
 		}
 	}
 	// Read Response Body
-	respBody, _ := ioutil.ReadAll(resp.Body)
-	return strings.TrimSpace(string(respBody)), nil
+	respBody, _ := io.ReadAll(resp.Body)
+	return string(respBody), nil
 }
